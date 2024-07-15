@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import Footer from './footer'
-import Header from './header'
+import Footer from './Footer'
+import Header from './Header'
 import Note from './Note'
 import CreateArea from './CreateArea'
 
