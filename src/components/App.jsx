@@ -1,50 +1,48 @@
-import React, { useState } from 'react';
-import Header from './Header';
-import Footer from './Footer';
-import Note from './Note';
-import CreateArea from './CreateArea';
+import React, { useState, useEffect } from 'react'
+import Footer from './footer'
+import Header from './header'
+import Note from './Note'
+import CreateArea from './CreateArea'
 
+function App() {
+  const [notes, setNotes] = useState([])
 
-// function createNotes(note){
-//   return(
-//     <Note 
-//     key={note.key}
-//     title={note.title}
-//       content={note.content}
-//     />
-//   )
-// }
+  // Fetch notes from localStorage when component mounts
+  useEffect(() => {
+    const storedNotes = JSON.parse(localStorage.getItem('notes')) || []
+    setNotes(storedNotes)
+  }, [])
 
-const App = () => {
-  const [notes,setNotes]=useState([]);
+  // Update localStorage whenever notes state changes
+  useEffect(() => {
+    localStorage.setItem('notes', JSON.stringify(notes))
+  }, [notes])
 
-  function addNote(newnote){
-    setNotes((prevValue)=>{
-      return [...prevValue,newnote];
-    });
-  };
+  function addNote(newNote) {
+    setNotes((prevNotes) => {
+      return [...prevNotes, newNote]
+    })
+  }
 
-  function deleteNote(id){
-    setNotes((prevNotes)=>{
-     return prevNotes.filter((noteItem,index)=>{
-          return index!==id;
-      });
-    });
+  function deleteNote(id) {
+    setNotes((prevNotes) => {
+      return prevNotes.filter((noteItem, index) => index !== id)
+    })
   }
 
   return (
     <div>
       <Header />
       <CreateArea onAdd={addNote} />
-      {notes.map((noteItem,index)=>{
-        return <Note
-         key={index}
-         id={index}
-         title={noteItem.title}
-         content={noteItem.content}
-         onDelete={deleteNote}
-         />;
-      })}
+      {notes.map((noteItem, index) => (
+        <Note
+          key={index}
+          id={index}
+          title={noteItem.title}
+          content={noteItem.content}
+          onDelete={deleteNote}
+        />
+      ))}
       <Footer />
     </div>
   )
